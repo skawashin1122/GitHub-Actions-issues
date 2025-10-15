@@ -64,8 +64,14 @@ class GitHubIssuesCopier:
         if labels:
             data['labels'] = labels
         
-        response = requests.post(url, headers=self.headers, json=data)
-        response.raise_for_status()
+        try:
+            response = requests.post(url, headers=self.headers, json=data)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            if response.status_code == 404:
+                raise Exception(f"リポジトリ {owner}/{repo} が見つからないか、アクセス権がありません。リポジトリが存在するか、トークンにrepo権限があるかを確認してください。")
+            else:
+                raise e
         
         created_issue = response.json()
         
@@ -111,10 +117,10 @@ class GitHubIssuesCopier:
             original_author = issue['user']['login']
             created_at = issue['created_at']
             
-            body = f'> **元のissue**: {original_link}\n'
-            body += f'> **作成者**: @{original_author}\n'
-            body += f'> **作成日**: {created_at}\n\n'
-            body += '---\n\n'
+            # body = f'> **元のissue**: {original_link}\n'
+            # body += f'> **作成者**: @{original_author}\n'
+            # body += f'> **作成日**: {created_at}\n\n'
+            # body += '---\n\n'
             body += issue['body'] or ''
             
             # ラベルを取得（コピー先に存在しない場合は無視される）
@@ -151,23 +157,6 @@ class GitHubIssuesCopier:
         
         print('\n' + '=' * 50)
         print('コピー完了!')
-        
-        # 完了通知用のIssueを作成
-        summary_title = f'Issues Copy Completed: {len(source_issues)} issues copied from {source_owner}/{source_repo}'
-        summary_body = f'## Issues Copy Summary\n\n'
-        summary_body += f'- **Source Repository**: {source_owner}/{source_repo}\n'
-        summary_body += f'- **Destination Repository**: {dest_owner}/{dest_repo}\n'
-        summary_body += f'- **Total Issues Copied**: {len(source_issues)}\n'
-        summary_body += f'- **Include Comments**: {include_comments}\n'
-        summary_body += f'- **Copy State**: {copy_state}\n\n'
-        summary_body += f'All issues have been successfully copied.\n\n'
-        summary_body += f'*This issue was automatically created by the issues copy script.*'
-        
-        try:
-            self.create_issue(dest_owner, dest_repo, summary_title, summary_body, labels=['automated'])
-            print('完了通知用のIssueを作成しました。')
-        except Exception as e:
-            print(f'完了通知Issueの作成に失敗しました: {str(e)}')
 
 
 if __name__ == '__main__':
