@@ -121,7 +121,7 @@ class GitHubIssuesCopier:
             # body += f'> **作成者**: @{original_author}\n'
             # body += f'> **作成日**: {created_at}\n\n'
             # body += '---\n\n'
-            body += issue['body'] or ''
+            body = issue['body'] or ''
             
             # ラベルを取得（コピー先に存在しない場合は無視される）
             labels = [label['name'] for label in issue['labels']]
