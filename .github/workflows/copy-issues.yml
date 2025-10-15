@@ -58,4 +58,4 @@ jobs:
           INCLUDE_COMMENTS: ${{ inputs.include_comments }}
           COPY_STATE: ${{ inputs.copy_state }}
         run: |
-          python copy_issues.py
+          python issues_copy.py
