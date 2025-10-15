@@ -151,6 +151,23 @@ class GitHubIssuesCopier:
         
         print('\n' + '=' * 50)
         print('コピー完了!')
+        
+        # 完了通知用のIssueを作成
+        summary_title = f'Issues Copy Completed: {len(source_issues)} issues copied from {source_owner}/{source_repo}'
+        summary_body = f'## Issues Copy Summary\n\n'
+        summary_body += f'- **Source Repository**: {source_owner}/{source_repo}\n'
+        summary_body += f'- **Destination Repository**: {dest_owner}/{dest_repo}\n'
+        summary_body += f'- **Total Issues Copied**: {len(source_issues)}\n'
+        summary_body += f'- **Include Comments**: {include_comments}\n'
+        summary_body += f'- **Copy State**: {copy_state}\n\n'
+        summary_body += f'All issues have been successfully copied.\n\n'
+        summary_body += f'*This issue was automatically created by the issues copy script.*'
+        
+        try:
+            self.create_issue(dest_owner, dest_repo, summary_title, summary_body, labels=['automated'])
+            print('完了通知用のIssueを作成しました。')
+        except Exception as e:
+            print(f'完了通知Issueの作成に失敗しました: {str(e)}')
 
 
 if __name__ == '__main__':
