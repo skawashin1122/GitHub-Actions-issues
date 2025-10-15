@@ -50,7 +50,10 @@ jobs:
       
       - name: Copy issues
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # 注意: secrets.GITHUB_TOKENは現在のリポジトリにしかアクセスできません
+          # 他のリポジトリのIssuesをコピーする場合は、repo権限を持つPersonal Access Tokenを
+          # PERSONAL_TOKENという名前でシークレットに追加してください
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           SOURCE_OWNER: ${{ inputs.source_owner }}
           SOURCE_REPO: ${{ inputs.source_repo }}
           DEST_OWNER: ${{ inputs.dest_owner }}

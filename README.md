@@ -44,9 +44,25 @@ GitHubのサーバーで自動実行する方法です。
 
 #### 準備
 1. このリポジトリを自分のGitHubにフォークする
-2. シークレット（秘密の設定）を設定する：
-   - リポジトリのSettings > Secrets and variables > Actions
-   - `GITHUB_TOKEN` を追加（自動で設定されているはず）
+2. **Personal Access Token (PAT) を作成する**：
+   - GitHubの右上のプロフィールアイコン → Settings
+   - 左メニューの一番下の「Developer settings」をクリック
+   - 「Personal access tokens」→「Tokens (classic)」をクリック
+   - 「Generate new token」→「Generate new token (classic)」を選択
+   - Note（メモ）に「Issues Copy Token」など、わかりやすい名前を入力
+   - Expiration（有効期限）を選択（例：90日、カスタムなど）
+   - **必要な権限（Scopes）を選択**：
+     - ✅ `repo` （リポジトリへのフルアクセス）にチェック
+   - 一番下の「Generate token」をクリック
+   - **表示されたトークンをコピー**（この画面を離れると二度と見られません！）
+3. **シークレット（秘密の設定）を設定する**：
+   - このリポジトリのSettings > Secrets and variables > Actions
+   - 「New repository secret」をクリック
+   - Name: `PERSONAL_TOKEN`
+   - Secret: 先ほどコピーしたトークンを貼り付け
+   - 「Add secret」をクリック
+
+> **重要**: デフォルトの`GITHUB_TOKEN`は現在のリポジトリにしかアクセスできないため、他のリポジトリのIssuesをコピーする場合は必ず`PERSONAL_TOKEN`を設定してください。
 
 #### 実行
 1. GitHubのリポジトリページを開く
