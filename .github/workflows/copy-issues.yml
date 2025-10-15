@@ -1,0 +1,61 @@
+name: Copy GitHub Issues
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_owner: skawashin1122
+        description: 'コピー元のリポジトリオーナー'
+        required: true
+        type: string
+      source_repo: bento-order-system
+        description: 'コピー元のリポジトリ名'
+        required: true
+        type: string
+      dest_owner: 6051-shintoku
+        description: 'コピー先のリポジトリオーナー'
+        required: true
+        type: string
+      dest_repo: test-repo
+        description: 'コピー先のリポジトリ名'
+        required: true
+        type: string
+      include_comments:
+        description: 'コメントもコピーする'
+        required: false
+        type: boolean
+        default: true
+      copy_state:
+        description: 'issueの状態(open/closed)も保持する'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  copy-issues:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+      
+      - name: Copy issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SOURCE_OWNER: ${{ inputs.source_owner }}
+          SOURCE_REPO: ${{ inputs.source_repo }}
+          DEST_OWNER: ${{ inputs.dest_owner }}
+          DEST_REPO: ${{ inputs.dest_repo }}
+          INCLUDE_COMMENTS: ${{ inputs.include_comments }}
+          COPY_STATE: ${{ inputs.copy_state }}
+        run: |
+          python copy_issues.py
