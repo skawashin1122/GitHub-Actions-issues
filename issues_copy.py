@@ -169,10 +169,50 @@ if __name__ == '__main__':
     include_comments = os.environ.get('INCLUDE_COMMENTS', 'true').lower() == 'true'
     copy_state = os.environ.get('COPY_STATE', 'true').lower() == 'true'
     
-    if not all([token, source_owner, source_repo, dest_owner, dest_repo]):
+    # 環境変数のチェックと詳細なエラーメッセージ
+    missing_vars = []
+    if not token:
+        missing_vars.append('GITHUB_TOKEN')
+    if not source_owner:
+        missing_vars.append('SOURCE_OWNER')
+    if not source_repo:
+        missing_vars.append('SOURCE_REPO')
+    if not dest_owner:
+        missing_vars.append('DEST_OWNER')
+    if not dest_repo:
+        missing_vars.append('DEST_REPO')
+    
+    if missing_vars:
+        print('=' * 60)
         print('エラー: 必要な環境変数が設定されていません')
-        print('必要な変数: GITHUB_TOKEN, SOURCE_OWNER, SOURCE_REPO, DEST_OWNER, DEST_REPO')
+        print('=' * 60)
+        print(f'未設定の変数: {", ".join(missing_vars)}')
+        print('\nこのスクリプトは以下の方法で実行してください：\n')
+        print('1. GitHub Actionsで実行する場合:')
+        print('   - Actionsタブ → "Copy GitHub Issues" → "Run workflow"')
+        print('   - フォームに必要な情報を入力して実行\n')
+        print('2. ローカルで実行する場合:')
+        print('   export GITHUB_TOKEN="your_token"')
+        print('   export SOURCE_OWNER="owner_name"')
+        print('   export SOURCE_REPO="repo_name"')
+        print('   export DEST_OWNER="owner_name"')
+        print('   export DEST_REPO="repo_name"')
+        print('   python issues_copy.py\n')
+        print('詳細はREADME.mdを参照してください。')
+        print('=' * 60)
         exit(1)
+    
+    print('=' * 60)
+    print('GitHub Issues コピーツール')
+    print('=' * 60)
+    print(f'設定確認:')
+    print(f'  コピー元: {source_owner}/{source_repo}')
+    print(f'  コピー先: {dest_owner}/{dest_repo}')
+    print(f'  コメントをコピー: {"はい" if include_comments else "いいえ"}')
+    print(f'  状態を保持: {"はい" if copy_state else "いいえ"}')
+    print(f'  トークン: {"設定済み ✓" if token else "未設定 ✗"}')
+    print('=' * 60)
+    print()
     
     copier = GitHubIssuesCopier(token)
     copier.copy_issues(
