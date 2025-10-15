@@ -8,24 +8,24 @@ on:
         required: true
         type: string
       source_repo: bento-order-system
-        description: 'コピー元のリポジトリ名'
+        description:  'コピー元のリポジトリ名'
         required: true
         type: string
       dest_owner: 6051-shintoku
-        description: 'コピー先のリポジトリオーナー'
+        description:  'コピー先のリポジトリオーナー'
         required: true
         type: string
       dest_repo: test-repo
-        description: 'コピー先のリポジトリ名'
+        description:  'コピー先のリポジトリ名'
         required: true
         type: string
       include_comments:
-        description: 'コメントもコピーする'
+        description:  'コメントもコピーする'
         required: false
         type: boolean
         default: true
       copy_state:
-        description: 'issueの状態(open/closed)も保持する'
+        description:  issueの状態(open/closed)も保持する'
         required: false
         type: boolean
         default: true
