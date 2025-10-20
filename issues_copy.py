@@ -161,7 +161,7 @@ class GitHubIssuesCopier:
 
 if __name__ == '__main__':
     # 環境変数から設定を取得
-    token = os.environ.get('GITHUB_TOKEN')
+    token = os.environ.get('PERSONAL_TOKEN')
     source_owner = os.environ.get('SOURCE_OWNER')
     source_repo = os.environ.get('SOURCE_REPO')
     dest_owner = os.environ.get('DEST_OWNER')
@@ -172,7 +172,7 @@ if __name__ == '__main__':
     # 環境変数のチェックと詳細なエラーメッセージ
     missing_vars = []
     if not token:
-        missing_vars.append('GITHUB_TOKEN')
+        missing_vars.append('PERSONAL_TOKEN')
     if not source_owner:
         missing_vars.append('SOURCE_OWNER')
     if not source_repo:
@@ -192,7 +192,7 @@ if __name__ == '__main__':
         print('   - Actionsタブ → "Copy GitHub Issues" → "Run workflow"')
         print('   - フォームに必要な情報を入力して実行\n')
         print('2. ローカルで実行する場合:')
-        print('   export GITHUB_TOKEN="your_token"')
+        print('   export PERSONAL_TOKEN="your_token"')
         print('   export SOURCE_OWNER="owner_name"')
         print('   export SOURCE_REPO="repo_name"')
         print('   export DEST_OWNER="owner_name"')
